@@ -1,28 +1,62 @@
-# О проекте 
-Данный проект создан в рамках курсовой работы. Плагин умеет:
-1)	Проверять модуль на одновременное использование Java и Kotlin кода.
-1)	Проверять на наличие генерации BuildConfig’a и предупреждать об этом.
-2)	Отключать неиспользуемые Android Gradle Plugin Features.
-3)	Отключать Jetifier.
-4)	Включать Gradle daemons.
-5)	Отключать R8 для debug сборки.
-6)	Разбивать ресурсов из библиотек и ресурсов приложения или использование не транзитивных R классов
-7)	Запускать Gradle tasks в параллельном режиме.
-8)	Отключать сжатия PNG картинок при каждой сборке 
+# Android Build Time Optimizer
 
-# Как установить
-Скачать [JAR файл](https://github.com/Freeezzzi/coursework3/blob/master2/jars/) и установить самостоятельно
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
+An IntelliJ IDEA / Android Studio plugin for Android Gradle build-time checks and one-click configuration tweaks.
 
-# Как пользоваться
-## Локальные оптимизации
-Нужно зайти в ```build.gradle``` или ```gradle.properties``` файл модуля, который нужно оптимизировать. 
-В панели инструментов можно будет выбрать доступные действия для данного файла и применить их и применить их <kbd>OptimizeBuildTimePlugin</kbd> -> <kbd>Optimizations</kbd> 
-![Локальные оптимизации](/images/Optimizations.jpg)
+The plugin helps Android developers inspect project build configuration, add Gradle optimization flags, and detect source-layout patterns that can make builds slower.
 
-## Проверка модуля на наличие Java и Kotlin кода
-Данная проверка включена по дефолту. Включить/отключить ее можно в настройках <strong>Preferences</strong> -> <strong>Editor</strong> -> <kbd>Inspections</kbd> -> <kbd>OptimizeBuildTimePlugin</kbd> -> <kbd>Java and Kotlin code together inspection</kbd>
+## Features
 
+- Apply all supported optimizations from a single IDE menu action.
+- Add or adjust common `gradle.properties` flags for Android build features, Jetifier, Gradle daemon, non-transitive `R` classes, parallel execution, and configuration cache.
+- Update Android `debug` build type settings in `build.gradle` / `build.gradle.kts`:
+  - `crunchPngs false`;
+  - `minifyEnabled false`;
+  - `shrinkResources false`.
+- Highlight `gradle.properties` values that may slow builds down and offer quick fixes.
+- Report modules that mix Java and Kotlin source files in the same source tree.
 
-# Демонстрация (нужно нажать на картинку)
+## Installation
+
+Download the plugin JAR from [`jars/`](jars/) and install it manually:
+
+`Settings/Preferences` > `Plugins` > `Install Plugin from Disk...`
+
+Then select the downloaded JAR file and restart the IDE if requested.
+
+## Usage
+
+Open an Android project's `gradle.properties`, `build.gradle`, or `build.gradle.kts` file.
+
+Use the main menu:
+
+`Android Build Time Optimizer` > `Optimize All`
+
+Or apply one optimization at a time:
+
+`Android Build Time Optimizer` > `Optimizations`
+
+After applying changes, review the generated Gradle edits before committing them. Some build features should only be disabled when the project does not use them.
+
+## Inspections
+
+The plugin includes an inspection for modules that contain both Java and Kotlin files.
+
+To configure it:
+
+`Preferences` > `Editor` > `Inspections` > `Android Build Time Optimizer` > `Mixed Java and Kotlin sources in one module`
+
+## Build from Source
+
+```bash
+./gradlew buildPlugin
+```
+
+The plugin artifact will be generated under `build/distributions/`.
+
+## Demo
+
 [<img src="https://img.youtube.com/vi/ioheOYLuvAE/maxresdefault.jpg" width="50%">](https://youtu.be/ioheOYLuvAE)
+
+## Notes
+
+This plugin edits Gradle files using text-based rules. Always review the resulting diff and run a local build after applying optimizations.
